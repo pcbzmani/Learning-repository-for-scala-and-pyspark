@@ -1,28 +1,29 @@
 # Import SparkSession
+# Author Manikandan
 
+from pyspark.sql.functions import *
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("pySpark").getOrCreate()
 
-df=spark.read\
-.format('csv')\
-.option('header',True)\
-.option("TreatEmptyValuesAsNulls", True)\
-.option("IgnoreLeadingWhiteSpace", True)\
-.option("IgnoreTrailingWhiteSpace", True)\
-.load('<inputfilepath>/employee_access.csv')
+df = spark.read\
+    .format('csv')\
+    .option('header', True)\
+    .option("TreatEmptyValuesAsNulls", True)\
+    .option("IgnoreLeadingWhiteSpace", True)\
+    .option("IgnoreTrailingWhiteSpace", True)\
+    .load('<inputfilepath>/employee_access.csv')
 
-from pyspark.sql.functions import *
 
 # Filter Dataframe
 devDF = df.filter(df['Devlopment'] == 'Y')
-intDF = df.filter(df['Integration'] == 'Y') 
-rlsDF = df.filter(df['Release'] == 'Y') 
-prdDF = df.filter(df['Production'] == 'Y') 
+intDF = df.filter(df['Integration'] == 'Y')
+rlsDF = df.filter(df['Release'] == 'Y')
+prdDF = df.filter(df['Production'] == 'Y')
 
-devDF = devDF.withColumn('Access',lit('Development'))
-intDF = intDF.withColumn('Access',lit('Integration'))
-rlsDF = rlsDF.withColumn('Access',lit('Release'))
-prdDF = prdDF.withColumn('Access',lit('Production'))
+devDF = devDF.withColumn('Access', lit('Development'))
+intDF = intDF.withColumn('Access', lit('Integration'))
+rlsDF = rlsDF.withColumn('Access', lit('Release'))
+prdDF = prdDF.withColumn('Access', lit('Production'))
 
 finalDF = devDF.union(intDF).union(rlsDF).union(prdDF)
 
@@ -43,7 +44,7 @@ finalDF.orderBy('EmployeeID').show()
 # |      7890|         N|          N|      N|         Y| Production|
 # +----------+----------+-----------+-------+----------+-----------+
 
-accessDF = finalDF.select('EmployeeID','Access')
+accessDF = finalDF.select('EmployeeID', 'Access')
 
 accessDF.show()
 
@@ -63,4 +64,3 @@ accessDF.show()
 # +----------+-----------+
 
 spark.stop()
-
