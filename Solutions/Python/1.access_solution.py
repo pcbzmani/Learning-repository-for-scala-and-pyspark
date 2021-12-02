@@ -1,7 +1,7 @@
 # Import SparkSession
 # Author Manikandan
 
-from pyspark.sql.functions import *
+from pyspark.sql.functions import lit
 from pyspark.sql import SparkSession
 spark = SparkSession.builder.appName("pySpark").getOrCreate()
 
