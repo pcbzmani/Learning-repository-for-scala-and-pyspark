@@ -1,0 +1,4 @@
+%pip install build
+
+%sh
+cd /Workspace/Users/odl_user_904009@databrickslabs.com/governance/governance/ ; python -m build
